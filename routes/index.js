@@ -3,6 +3,7 @@ const router = express.Router();
 
 router.use("/candidate", require("./candidate"));
 router.use("/company", require("./company"));
+router.use("/jobs", require("./jobs"));
 
 // Default Routers
 router.get("/", function (req, res) {

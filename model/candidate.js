@@ -1,5 +1,3 @@
-const knex = require("knex");
-
 const getCandidate = async () => {
   return await db.raw("Select * from candidate").then((res) => res[0]);
 };
