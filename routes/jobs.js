@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { getJobByKeyword } = require("../controller/jobs");
+const {
+  getJobByKeyword,
+  getJobOpeningDetails,
+  getJobApplicationQuestions,
+} = require("../controller/jobs");
 
 router.get("/searchJobByKeyword", async (req, res) => {
   const keyword = req.query.keyword;
@@ -13,4 +17,25 @@ router.get("/searchJobByKeyword", async (req, res) => {
   }
 });
 
+router.get("/getJobOpeningDetails", async (req, res) => {
+  const jobId = req.query.jobId;
+
+  try {
+    const response = await getJobOpeningDetails(jobId);
+    res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.get("/getJobApplicationQuestions", async (req, res) => {
+  const jobId = req.query.jobId;
+
+  try {
+    const response = await getJobApplicationQuestions(jobId);
+    res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
 module.exports = router;
