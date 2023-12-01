@@ -15,7 +15,7 @@ const findJobOpeningDetails = async (jobId) => {
 
   return await db
     .raw(
-      `select job_opening_id,job_location,job_title,job_desc,requirements ,c.company_name,c.company_desc
+      `select job_opening_id as jobOpeningId,job_location as jobLocation,job_title as jobTitle,job_desc as jobDesc,requirements ,c.company_name as companyName,c.company_desc as companyDesc
       from job_openings jo 
       inner join company c 
       on jo.company_id = c.company_id
@@ -35,7 +35,7 @@ const findJobApplicationQuestion = async (jobId) => {
 
   return await db
     .raw(
-      `select app_ques_id as appQuestionId,app_question_desc as appQuestionDesc
+      `select app_ques_id as appQuestionId,app_question_desc as appQuestionDesc``
       from application_questions
       where job_opening_id =?`,
       [jobId]

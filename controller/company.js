@@ -1,4 +1,4 @@
-const { getCompanyDataById } = require("../model/company");
+const { getCompanyDataById, insertCompanyData } = require("../model/company");
 const { findUserByEmail } = require("../model/candidate");
 
 const loginCompany = async (emailId, password) => {
@@ -12,4 +12,11 @@ const loginCompany = async (emailId, password) => {
   return await getCompanyDataById(userData.user_id);
 };
 
-module.exports = { loginCompany };
+const registerCompany = async (companyInformation) => {
+  console.log(companyInformation);
+  if (!companyInformation) throw new Error("Data not available");
+  //TODO: Do we need any check ?
+
+  return await insertCompanyData(companyInformation);
+};
+module.exports = { loginCompany, registerCompany };
