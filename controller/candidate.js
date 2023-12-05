@@ -3,6 +3,10 @@ const {
   findUserByEmail,
   getCandidateById,
   fetchCandidateInformation,
+  insertCandidateData,
+  insertIntoCredMapping,
+  insertIntoEducation,
+  insertIntoWorkEx,
 } = require("../model/candidate");
 
 const getAllCandidate = async () => {
@@ -29,34 +33,18 @@ const getCandidateInformation = async (candidateId) => {
 
 const registerCandidate = async (
   candidateInformation,
-  educationInforamtion,
+  educationInformation,
   workExperienceInformation
 ) => {
- 
-  return;
-  const candidateInformationData = {
-    firstName: candidateData.firstName,
-    lastName: candidateData.lastName,
-    emailId: candidateData?.emailId,
-    streetNo: candidateData.streetNo,
-    streetName: candidateData.streetName,
-    city: candidateData.city,
-    state: candidateData.state,
-    country: candidateData.country,
-    zipcode: candidateData.zipcode,
-  };
-
-  const educationInforamtion = {
-    firstName: candidateData.firstName,
-    lastName: candidateData.lastName,
-    emailId: candidateData?.emailId,
-    streetNo: candidateData.streetNo,
-    streetName: candidateData.streetName,
-    city: candidateData.city,
-    state: candidateData.state,
-    country: candidateData.country,
-    zipcode: candidateData.zipcode,
-  };
+  console.log(workExperienceInformation);
+  return (
+    insertCandidateData(candidateInformation)
+      .then((res) =>
+        insertIntoCredMapping(candidateInformation, res)
+      )
+      .then((res) => insertIntoEducation(educationInformation, res))
+      .then((res) => insertIntoWorkEx(workExperienceInformation, res))
+  );
 };
 
 module.exports = {

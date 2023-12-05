@@ -26,8 +26,8 @@ router.post("/loginCandidate", async (req, res) => {
 
 router.post("/registerCandidate", async (req, res) => {
   const candidateInformation = req.body.candidateInformation;
-  const educationInforamtion = req.body.educationInforamtion;
-  const workExperienceInformation = req.body.workExperienceInformation;
+  const educationInforamtion = req.body.educationInfo;
+  const workExperienceInformation = req.body.workExperienceInfo;
 
   try {
     const response = await registerCandidate(
