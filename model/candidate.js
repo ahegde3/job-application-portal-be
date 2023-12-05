@@ -16,9 +16,10 @@ const getCandidateById = async (id) => {
   console.log("id", id);
 
   return await db
-    .raw("Select candidate_id,first_name from candidate where candidate_id=?", [
-      id,
-    ])
+    .raw(
+      "Select candidate_id as user_id,first_name from candidate where candidate_id=?",
+      [id]
+    )
     .then((res) => checkValidation(res))
     .catch((e) => {
       console.log("error");
@@ -26,9 +27,19 @@ const getCandidateById = async (id) => {
     });
 };
 
+const fetchCandidateInformation = async (candidateId) => {
+  return await db
+    .raw("call getCandidateInfo(?)", [candidateId])
+    .then((res) => checkValidation(res));
+};
 const checkValidation = (res) => {
   if (res?.[0]?.[0]) return res[0][0];
   throw new Error("result not found");
 };
 
-module.exports = { getCandidate, findUserByEmail, getCandidateById };
+module.exports = {
+  getCandidate,
+  findUserByEmail,
+  getCandidateById,
+  fetchCandidateInformation,
+};

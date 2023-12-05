@@ -2,6 +2,7 @@ const {
   getCandidate,
   findUserByEmail,
   getCandidateById,
+  fetchCandidateInformation,
 } = require("../model/candidate");
 
 const getAllCandidate = async () => {
@@ -20,4 +21,14 @@ const loginCandidate = async (emailId, password) => {
   return await getCandidateById(userData.user_id);
 };
 
-module.exports = { getAllCandidate, loginCandidate };
+const getCandidateInformation = async (candidateId) => {
+  if (!candidateId) throw new Error("Invalid params");
+
+  return await fetchCandidateInformation(candidateId);
+};
+
+module.exports = {
+  getAllCandidate,
+  loginCandidate,
+  getCandidateInformation,
+};
