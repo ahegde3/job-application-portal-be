@@ -27,8 +27,41 @@ const getCandidateInformation = async (candidateId) => {
   return await fetchCandidateInformation(candidateId);
 };
 
+const registerCandidate = async (
+  candidateInformation,
+  educationInforamtion,
+  workExperienceInformation
+) => {
+ 
+  return;
+  const candidateInformationData = {
+    firstName: candidateData.firstName,
+    lastName: candidateData.lastName,
+    emailId: candidateData?.emailId,
+    streetNo: candidateData.streetNo,
+    streetName: candidateData.streetName,
+    city: candidateData.city,
+    state: candidateData.state,
+    country: candidateData.country,
+    zipcode: candidateData.zipcode,
+  };
+
+  const educationInforamtion = {
+    firstName: candidateData.firstName,
+    lastName: candidateData.lastName,
+    emailId: candidateData?.emailId,
+    streetNo: candidateData.streetNo,
+    streetName: candidateData.streetName,
+    city: candidateData.city,
+    state: candidateData.state,
+    country: candidateData.country,
+    zipcode: candidateData.zipcode,
+  };
+};
+
 module.exports = {
   getAllCandidate,
   loginCandidate,
   getCandidateInformation,
+  registerCandidate,
 };
