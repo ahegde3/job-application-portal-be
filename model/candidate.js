@@ -47,8 +47,8 @@ const insertCandidateData = async (candidateInformation) => {
     zipcode,
     highestDegreeAttained: highest_degree_attained,
     gender,
-    veteranStatus: veteran_status,
-    disabilityStatus: disability_status,
+    veteran_status,
+    disability_status,
   } = candidateInformation;
 
   console.log(
@@ -60,7 +60,6 @@ const insertCandidateData = async (candidateInformation) => {
     city,
     state,
     zipcode,
-    highest_degree_attained,
     gender,
     veteran_status,
     disability_status,
@@ -79,7 +78,6 @@ const insertCandidateData = async (candidateInformation) => {
     !state ||
     !country ||
     !zipcode ||
-    !highest_degree_attained ||
     !gender ||
     !veteran_status ||
     !disability_status
@@ -88,8 +86,8 @@ const insertCandidateData = async (candidateInformation) => {
 
   return await db
     .raw(
-      `insert into candidate(first_name, last_name, email_id, street_no, street_name, city, state, zipcode, highest_degree_attained, gender,
-    veteran_status, disability_status, country, phone_no) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `insert into candidate(first_name, last_name, email_id, street_no, street_name, city, state, zipcode, gender,
+    veteran_status, disability_status, country, phone_no) values(?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         first_name,
         last_name,
@@ -99,7 +97,6 @@ const insertCandidateData = async (candidateInformation) => {
         city,
         state,
         zipcode,
-        highest_degree_attained,
         gender,
         veteran_status,
         disability_status,
@@ -132,7 +129,7 @@ const insertIntoCredMapping = async (credMappingInfo, candidate_id) => {
 const insertIntoEducation = async (educationInfo, candidate_id) => {
   const formattedEducationInfo = educationInfo.map((education) => {
     const {
-      universityName: university_name,
+      university: university_name,
       degree: degree_type,
       gpa,
       major,
@@ -163,7 +160,7 @@ const insertIntoWorkEx = async (workExInfo, candidate_Id) => {
   const formattedWorkExInfo = workExInfo.map((workEx) => {
     const {
       position: position,
-      organizationName: organization_name,
+      organization: organization_name,
       responsibilities,
       isCurrentlyWorking: is_currently_working,
       startDate: start_date,
