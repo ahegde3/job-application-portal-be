@@ -7,6 +7,9 @@ const {
   insertIntoCredMapping,
   insertIntoEducation,
   insertIntoWorkEx,
+  updateCandidateData,
+  updateWorkEx,
+  updateEducationData,
 } = require("../model/candidate");
 
 const getAllCandidate = async () => {
@@ -19,10 +22,11 @@ const loginCandidate = async (emailId, password) => {
 
   const USER_TYPE = "candidate";
   const userData = await findUserByEmail(emailId, USER_TYPE);
+  // console.log(userData);
   if (!userData) throw new Error("User not found");
 
   if (userData.password !== password) throw new Error("password not matching");
-  return await getCandidateById(userData.user_id);
+  return await getCandidateById(userData.candidate_id);
 };
 
 const getCandidateInformation = async (candidateId) => {
@@ -37,14 +41,24 @@ const registerCandidate = async (
   workExperienceInformation
 ) => {
   console.log(workExperienceInformation);
-  return (
-    insertCandidateData(candidateInformation)
-      .then((res) =>
-        insertIntoCredMapping(candidateInformation, res)
-      )
-      .then((res) => insertIntoEducation(educationInformation, res))
-      .then((res) => insertIntoWorkEx(workExperienceInformation, res))
+
+  //check if candidate is already present
+  const USER_TYPE = "candidate";
+  const userData = await findUserByEmail(
+    candidateInformation.emailId,
+    USER_TYPE
   );
+  console.log(userData);
+  if (userData) {
+    return updateCandidateData(candidateInformation, userData.candidate_id)
+      .then(updateWorkEx(workExperienceInformation, userData.candidate_id))
+      .then(updateEducationData(educationInformation, userData.candidate_id));
+  }
+
+  return insertCandidateData(candidateInformation)
+    .then((res) => insertIntoCredMapping(candidateInformation, res))
+    .then((res) => insertIntoEducation(educationInformation, res))
+    .then((res) => insertIntoWorkEx(workExperienceInformation, res));
 };
 
 module.exports = {

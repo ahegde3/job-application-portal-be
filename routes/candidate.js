@@ -15,7 +15,7 @@ router.get("/getAllCandidate", async (req, res) => {
 router.post("/loginCandidate", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  console.log(email, password);
   try {
     const response = await loginCandidate(email, password);
     res.send(response); // Sending the response back on success

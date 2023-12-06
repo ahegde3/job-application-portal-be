@@ -3,6 +3,7 @@ const getCandidate = async () => {
 };
 
 const findUserByEmail = async (email, user_type) => {
+  console.log("email", email, user_type);
   return await db
     .raw("Select * from cred_mapping where email_id=? and user_type=?", [
       email,
@@ -182,6 +183,135 @@ const insertIntoWorkEx = async (workExInfo, candidate_Id) => {
   }
 };
 
+const updateCandidateData = (candidateInformation, candidate_Id) => {
+  const {
+    firstName: first_name,
+    lastName: last_name,
+    emailId: email_id,
+    phoneNo: phone_no,
+    streetNo: street_no,
+    streetName: street_name,
+    city,
+    state,
+    country,
+    zipcode,
+    highestDegreeAttained: highest_degree_attained,
+    gender,
+    veteran_status,
+    disability_status,
+  } = candidateInformation;
+
+  console.log(
+    first_name,
+    last_name,
+    email_id,
+    street_no,
+    street_name,
+    city,
+    state,
+    zipcode,
+    gender,
+    veteran_status,
+    disability_status,
+    country,
+    phone_no
+  );
+
+  if (
+    !first_name ||
+    !last_name ||
+    !email_id ||
+    !phone_no ||
+    !street_no ||
+    !street_name ||
+    !city ||
+    !state ||
+    !country ||
+    !zipcode ||
+    !gender ||
+    !veteran_status ||
+    !disability_status
+  )
+    throw new Error("Some fields are missing");
+
+  return db.raw(
+    "update candidate set first_name= ?,last_name=?,email_id=?,phone_no=?,street_no=?,street_name=?,city=?,state=?,country=?,zipcode=?,gender=?,veteran_status=?,disability_status=? where candidate_id=?",
+    [
+      first_name,
+      last_name,
+      email_id,
+      phone_no,
+      street_no,
+      street_name,
+      city,
+      state,
+      country,
+      zipcode,
+      gender,
+      veteran_status,
+      disability_status,
+
+      candidate_Id,
+    ]
+  );
+};
+
+const updateEducationData = async (educationInfo, candidate_id) => {
+  const formattedEducationInfo = educationInfo.map((education) => {
+    const {
+      university: university_name,
+      degreeType: degree_type,
+      gpa,
+      major,
+      country,
+      startDate: start_date,
+      endDate: end_date,
+    } = education;
+    return {
+      university_name,
+      degree_type,
+      gpa,
+      major,
+      country,
+      start_date,
+      end_date,
+      candidate_id,
+    };
+  });
+
+  for (const education of formattedEducationInfo) {
+    await db("education").update(education).where({ candidate_id });
+  }
+};
+
+const updateWorkEx = async (workExInfo, candidate_id) => {
+  const formattedWorkExInfo = workExInfo.map((workEx) => {
+    const {
+      position: position,
+      organization: organization_name,
+      responsibilities,
+      isCurrentlyWorking: is_currently_working,
+      startDate: start_date,
+      endDate: end_date,
+    } = workEx;
+    return {
+      position,
+      organization_name,
+      responsibilities,
+      is_currently_working,
+      start_date,
+      end_date,
+    };
+  });
+
+  for (const workExpereince of formattedWorkExInfo) {
+    //TODO: Do we need raw query?
+    await db("work_experience")
+      .update(workExpereince)
+      .where({ candidate_Id: candidate_id });
+  }
+};
+
 module.exports = {
   getCandidate,
   findUserByEmail,
@@ -191,4 +321,8 @@ module.exports = {
   insertCandidateData,
   insertIntoCredMapping,
   insertIntoEducation,
+  updateCandidateData,
+  updateWorkEx,
+  updateEducationData,
+  updateEducationData,
 };
