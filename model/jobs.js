@@ -93,6 +93,51 @@ const findAppliedJobs = async (candidateId) => {
     .then((res) => res?.[0]);
 };
 
+const insertJobOpening = (
+  company_id,
+  {
+    jobTitle: job_title,
+    noOfVacancies: no_of_vacancies,
+    jobLocation: job_location,
+    jobDescription: job_desc,
+    requirements,
+  }
+) => {
+  if (
+    !job_title ||
+    !no_of_vacancies ||
+    !job_desc ||
+    !job_location ||
+    !requirements
+  )
+    throw new Error("Some fields are missing");
+
+  return db
+    .raw(
+      "insert into job_openings(job_title,no_of_vacancies,job_location,job_desc,requirements,company_id)  values(?,?,?,?,?,?)",
+      [
+        job_title,
+        no_of_vacancies,
+        job_location,
+        job_desc,
+        requirements,
+        company_id,
+      ]
+    )
+    .then((res) => res[0].insertId);
+};
+
+const insertIntoApplicationQuestions = async (
+  job_opening_id,
+  { questions }
+) => {
+  for (const app_question_desc of questions) {
+    await db.raw(
+      "insert into application_questions(app_question_desc,job_opening_id) values(?,?)",
+      [app_question_desc, job_opening_id]
+    );
+  }
+};
 const checkValidation = (res) => {
   if (res?.[0]?.[0]) return res[0][0];
   throw new Error("result not found");
@@ -105,4 +150,6 @@ module.exports = {
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
   findAppliedJobs,
+  insertJobOpening,
+  insertIntoApplicationQuestions,
 };

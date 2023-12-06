@@ -96,7 +96,7 @@ const insertIntoCredMapping = async (credMappingInfo, company_id) => {
   const { companyEmailId: email_id, password } = credMappingInfo;
 
   if (!email_id || !password || !company_id)
-    throw new Error("THis Some fields are missing");
+    throw new Error("Some fields are missing");
 
   const user_type = "company";
   const candidate_id = null;
