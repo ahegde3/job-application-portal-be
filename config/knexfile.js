@@ -6,6 +6,7 @@ module.exports = {
       port: "3306",
       user: process.env.username,
       password: process.env.password,
+      database: "job_application_portal",
     },
     migrations: {
       directory: "./migrations",
