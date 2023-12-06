@@ -4,6 +4,7 @@ const {
   getJobByKeyword,
   getJobOpeningDetails,
   getJobApplicationQuestions,
+  applyForJobs,
 } = require("../controller/jobs");
 
 router.get("/searchJobByKeyword", async (req, res) => {
@@ -38,4 +39,18 @@ router.get("/getJobApplicationQuestions", async (req, res) => {
     res.status(404).json({ error: error.message }); // Sending error message in JSON format
   }
 });
+
+router.post("/applyForJobs", async (req, res) => {
+  const candidateId = req.body.candidateId;
+  const jobId = req.body.jobId;
+  const answers = req.body.answers;
+
+  try {
+    const response = await applyForJobs(candidateId, jobId, answers);
+    res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
 module.exports = router;

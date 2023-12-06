@@ -30,12 +30,12 @@ const findJobOpeningDetails = async (jobId) => {
 };
 
 const findJobApplicationQuestion = async (jobId) => {
-  console.log("findJobOpeningDetails");
+  console.log("findJobOpeningDetails", jobId);
   if (!jobId) throw new Error("Empty jobId");
 
   return await db
     .raw(
-      `select app_ques_id as appQuestionId,app_question_desc as appQuestionDesc``
+      `select app_ques_id as appQuestionId,app_question_desc as appQuestionDesc
       from application_questions
       where job_opening_id =?`,
       [jobId]
@@ -47,6 +47,37 @@ const findJobApplicationQuestion = async (jobId) => {
     });
 };
 
+const insertJobApplication = async (candidate_id, job_opening_id) => {
+  console.log(candidate_id, job_opening_id);
+  const STATUS = "APPLIED";
+  const applicationId = await db
+    .raw(
+      "insert into job_application(candidate_id,job_opening_id,app_status) values(?,?,?)",
+      [candidate_id, job_opening_id, "STATUS"]
+    )
+    .then((res) => res[0].insertId);
+
+  if (!applicationId) throw new Error("There is some issue");
+  return applicationId;
+};
+
+const insertIntoApplicationQuestionJobIdMapping = async (
+  job_application_id,
+  answers
+) => {
+  const formattedAnswers = answers.map((ans) => {
+    return {
+      job_application_id,
+      app_ques_id: ans.appQuestionId,
+      answer: ans.answerDesc,
+    };
+  });
+
+  for (const answer of formattedAnswers) {
+    await db("application_question_job_id_mapping").insert(answer);
+  }
+};
+
 const checkValidation = (res) => {
   if (res?.[0]?.[0]) return res[0][0];
   throw new Error("result not found");
@@ -56,4 +87,6 @@ module.exports = {
   findJobsByKeyword,
   findJobOpeningDetails,
   findJobApplicationQuestion,
+  insertJobApplication,
+  insertIntoApplicationQuestionJobIdMapping,
 };
