@@ -1,4 +1,4 @@
-const { getCompany, findCompanyByEmail, getCompanyDataById, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping } = require("../model/company");
+const { getCompany, findCompanyByEmail, getCompanyDataById, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping, updateCompanyData, updateCredMapping } = require("../model/company");
 // const { findUserByEmail } = require("../model/candidate");
 
 const getAllCompany = async () => {
@@ -29,7 +29,23 @@ const registerCompany = async (companyInformation) => {
   if (!companyInformation) throw new Error("Data not available");
   //TODO: Do we need any check ?
 
-  return await insertCompanyData(companyInformation);
+  //check if company is already present
+  const USER_TYPE = "company";
+  const userData = await findCompanyByEmail(
+    companyInformation.companyEmailId,
+    USER_TYPE
+  );
+
+  console.log(userData);
+  if (userData) {
+    console.log("update data calling")
+    return updateCompanyData(companyInformation, userData.company_id)
+    .then(updateCredMapping(companyInformation, userData.company_id));
+  }
+  console.log("insert again calling")
+  return insertCompanyData(companyInformation)
+    .then((res) => insertIntoCredMapping(companyInformation, res));
+
 };
 module.exports = { getAllCompany, loginCompany, registerCompany, getCompanyInformation };
 
