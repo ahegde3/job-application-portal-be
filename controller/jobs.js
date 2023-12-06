@@ -4,6 +4,7 @@ const {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
+  findAppliedJobs,
 } = require("../model/jobs");
 
 const getJobByKeyword = (keyword) => {
@@ -33,9 +34,16 @@ const applyForJobs = async (candidateId, jobId, answers) => {
   );
 };
 
+const getAppliedJobs = async (candidateId) => {
+  if (!candidateId) throw new Error("Missing params");
+
+  return findAppliedJobs(candidateId);
+};
+
 module.exports = {
   getJobByKeyword,
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
+  getAppliedJobs,
 };

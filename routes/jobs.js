@@ -5,6 +5,7 @@ const {
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
+  getAppliedJobs,
 } = require("../controller/jobs");
 
 router.get("/searchJobByKeyword", async (req, res) => {
@@ -48,6 +49,17 @@ router.post("/applyForJobs", async (req, res) => {
   try {
     const response = await applyForJobs(candidateId, jobId, answers);
     res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.get("/getAppliedJobsForCandidate", async (req, res) => {
+  const candidateId = req.query.candidateId;
+
+  try {
+    const response = await getAppliedJobs(candidateId);
+    res.send(response);
   } catch (error) {
     res.status(404).json({ error: error.message }); // Sending error message in JSON format
   }

@@ -1,3 +1,5 @@
 
 #skip env file
 .env
+
+/node_modules

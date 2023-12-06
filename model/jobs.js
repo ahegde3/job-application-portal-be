@@ -48,12 +48,12 @@ const findJobApplicationQuestion = async (jobId) => {
 };
 
 const insertJobApplication = async (candidate_id, job_opening_id) => {
-  console.log(candidate_id, job_opening_id);
+  console.log("insertJobApplication", candidate_id, job_opening_id);
   const STATUS = "APPLIED";
   const applicationId = await db
     .raw(
       "insert into job_application(candidate_id,job_opening_id,app_status) values(?,?,?)",
-      [candidate_id, job_opening_id, "STATUS"]
+      [candidate_id, job_opening_id, STATUS]
     )
     .then((res) => res[0].insertId);
 
@@ -78,6 +78,21 @@ const insertIntoApplicationQuestionJobIdMapping = async (
   }
 };
 
+const findAppliedJobs = async (candidateId) => {
+  return await db
+    .raw(
+      `select distinct jo.job_opening_id,jo.job_title as title, ja.app_status as status,c.company_name as companyName
+   from job_application  ja
+   inner join job_openings jo
+   on ja.job_opening_id = jo.job_opening_id
+   inner join company c
+   on jo.company_id =c.company_id
+   where candidate_id=?`,
+      [candidateId]
+    )
+    .then((res) => res?.[0]);
+};
+
 const checkValidation = (res) => {
   if (res?.[0]?.[0]) return res[0][0];
   throw new Error("result not found");
@@ -89,4 +104,5 @@ module.exports = {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
+  findAppliedJobs,
 };
