@@ -1,3 +1,17 @@
+const getCompany = async () => {
+  return await db.raw("Select * from company").then((res) => res[0]);
+};
+
+const findCompanyByEmail = async (email, user_type) => {
+  return await db
+    .raw("Select * from cred_mapping where email_id=? and user_type=?", [
+      email,
+      user_type,
+    ])
+    .then((res) => res[0][0])
+    .catch((e) => null);
+};
+
 const getCompanyDataById = async (id) => {
   console.log("id", id);
 
@@ -9,33 +23,39 @@ const getCompanyDataById = async (id) => {
     });
 };
 
+const fetchCompanyInformation = async (companyId) => {
+  return await db
+    .raw("call getCompanyInfo(?)", [companyId])
+    .then((res) => checkValidation(res));
+};
+
 const insertCompanyData = async (companyInformation) => {
   const {
-    companyName,
-    companyEmailId,
-    companyPhoneNo,
-    streetNo,
-    streetName,
+    companyName: company_name,
+    companyEmailId: company_email_id,
+    companyPhoneNo: company_phone,
+    streetNo: street_no,
+    streetName: street_name,
     city,
     state,
     country,
     zipcode,
     industry,
-    companyDesc,
+    companyDesc: company_desc,
   } = companyInformation;
 
   if (
-    !companyName ||
-    !companyEmailId ||
-    !companyPhoneNo ||
-    !streetNo ||
-    !streetName ||
+    !company_name ||
+    !company_email_id ||
+    !company_phone ||
+    !street_no ||
+    !street_name ||
     !city ||
     !state ||
     !country ||
     !zipcode ||
     !industry ||
-    !companyDesc
+    !company_desc
   )
     throw new Error("Some fields are missing");
 
@@ -44,17 +64,17 @@ const insertCompanyData = async (companyInformation) => {
       (company_name, company_email_id, company_phone, street_no, street_name, city, state,country, zipcode, industry, company_desc)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      companyName,
-      companyEmailId,
-      companyPhoneNo,
-      streetNo,
-      streetName,
+      company_name,
+      company_email_id,
+      company_phone,
+      street_no,
+      street_name,
       city,
       state,
       country,
       zipcode,
       industry,
-      companyDesc,
+      company_desc
     ]
   );
 };
@@ -64,4 +84,24 @@ const checkValidation = (res) => {
   throw new Error("result not found");
 };
 
-module.exports = { getCompanyDataById, insertCompanyData };
+const insertIntoCredMapping = async (credMappingInfo, company_id) => {
+  console.log("insertIntoCredMapping")
+  console.log(credMappingInfo)
+  const { companyEmailId: email_id, password } = credMappingInfo;
+  console.log("cred mapping should have" + email_id, password);
+  console.log("cred mapping should have" + company_id);
+  if (!email_id || !password || !company_id)
+    throw new Error("THis Some fields are missing");
+
+  const res = await db.raw(
+    `insert into cred_mapping(email_id, password, candidate_id, company_id, user_type) values
+    (?, ?, ?, ?, ?);`,
+    [email_id, password, null, company_id, "company"]
+  );
+
+  console.log("cred mapping should have" + email_id, password);
+
+
+};
+
+module.exports = { getCompany, getCompanyDataById, findCompanyByEmail, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping };
