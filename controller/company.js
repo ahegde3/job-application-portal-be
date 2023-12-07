@@ -59,10 +59,10 @@ const registerCompany = async (companyInformation) => {
   );
 };
 
-const deleteListing = async (job_opening_id) => {
-  if (!job_opening_id) throw new Error("Invalid job opening id");
+const deleteListing = async (jobId) => {
+  if (!jobId) throw new Error("Invalid job opening id");
 
-  return await deleteJobListing(job_opening_id);
+  return await deleteJobListing(jobId);
 };
 module.exports = { getAllCompany, loginCompany, registerCompany, getCompanyInformation, deleteListing};
 
