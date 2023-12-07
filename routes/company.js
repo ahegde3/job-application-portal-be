@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { loginCompany, registerCompany, getAllCompany, getCompanyInformation } = require("../controller/company");
+const { loginCompany, registerCompany, getAllCompany, getCompanyInformation, deleteListing } = require("../controller/company");
 
 router.get("/", (req, res) => {
   console.log("inside");
@@ -40,6 +40,17 @@ router.get("/getCompanyInformation", async (req, res) => {
   try {
     const resposne = await getCompanyInformation(companyId);
     res.send(resposne);
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.post("/deleteOpeningByCompany", async (req, res) => {
+  const companyId = req.body.userData;
+
+  try {
+    const response = await deleteListing(companyId);
+    res.send(response); // Sending the response back on success
   } catch (error) {
     res.status(404).json({ error: error.message }); // Sending error message in JSON format
   }

@@ -4,6 +4,7 @@ const {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
+  reviewListOfAppliedJobsByCandidates
 } = require("../model/jobs");
 
 const getJobByKeyword = (keyword) => {
@@ -33,9 +34,17 @@ const applyForJobs = async (candidateId, jobId, answers) => {
   );
 };
 
+const getListOfAppliedJobsByCandidates = (jobId) => {
+  console.log("reviewListOfAppliedJobsByCandidates", jobId);
+  if (!jobId) throw new Error("");
+
+  return reviewListOfAppliedJobsByCandidates(jobId);
+};
+
 module.exports = {
   getJobByKeyword,
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
+  getListOfAppliedJobsByCandidates
 };

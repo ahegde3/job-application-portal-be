@@ -29,6 +29,26 @@ const findJobOpeningDetails = async (jobId) => {
     });
 };
 
+const reviewListOfAppliedJobsByCandidates = async (jobId) => {
+  console.log("reviewListOfAppliedJobsByCandidates");
+  if (!jobId) throw new Error("Empty jobId in query");
+
+  return await db
+    .raw(
+      `select c.first_name, c.last_name, c.email_id, c.phone_no, j.app_status from candidate c 
+      inner join job_application j on
+      c.candidate_id = j.candidate_id
+      where j.job_application_id = ?
+      order by j.application_updated_at`,
+      [jobId]
+    )
+    .then((res) => checkValidation(res))
+    .catch((e) => {
+      console.log(e);
+      throw new Error("Some error");
+    });
+};
+
 const findJobApplicationQuestion = async (jobId) => {
   console.log("findJobOpeningDetails", jobId);
   if (!jobId) throw new Error("Empty jobId");
@@ -53,7 +73,7 @@ const insertJobApplication = async (candidate_id, job_opening_id) => {
   const applicationId = await db
     .raw(
       "insert into job_application(candidate_id,job_opening_id,app_status) values(?,?,?)",
-      [candidate_id, job_opening_id, "STATUS"]
+      [candidate_id, job_opening_id, STATUS]
     )
     .then((res) => res[0].insertId);
 
@@ -74,7 +94,11 @@ const insertIntoApplicationQuestionJobIdMapping = async (
   });
 
   for (const answer of formattedAnswers) {
-    await db("application_question_job_id_mapping").insert(answer);
+    //await db("application_question_job_id_mapping").insert(answer);
+    await db.raw("insert into application_question_job_id_mapping(job_application_id, app_ques_id, answer) values(?,?,?) ",
+    [answer.job_application_id, answer.app_ques_id, answer.answer]
+    )
+    .then((res) => res[0].insertId);
   }
 };
 
@@ -89,4 +113,5 @@ module.exports = {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
+  reviewListOfAppliedJobsByCandidates
 };
