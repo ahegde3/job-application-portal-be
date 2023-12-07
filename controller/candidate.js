@@ -40,15 +40,19 @@ const registerCandidate = async (
   educationInformation,
   workExperienceInformation
 ) => {
-  console.log(workExperienceInformation);
+  const education = educationInformation
+    .sort((a, b) => findHighestEducation(a, b))
+    .map((education) => education.degree);
 
+  candidateInformation.highestDegreeAttained = education[education.length - 1];
+  console.log(candidateInformation);
   //check if candidate is already present
   const USER_TYPE = "candidate";
   const userData = await findUserByEmail(
     candidateInformation.emailId,
     USER_TYPE
   );
-  console.log(userData);
+  console.log("userData", userData);
   if (userData) {
     return updateCandidateData(candidateInformation, userData.candidate_id)
       .then(updateWorkEx(workExperienceInformation, userData.candidate_id))
@@ -59,6 +63,19 @@ const registerCandidate = async (
     .then((res) => insertIntoCredMapping(candidateInformation, res))
     .then((res) => insertIntoEducation(educationInformation, res))
     .then((res) => insertIntoWorkEx(workExperienceInformation, res));
+};
+
+const findHighestEducation = (a, b) => {
+  const endDateA = a.endDate;
+  const endDateB = b.endDate;
+
+  if (endDateA > endDateB) {
+    return 1; // Return -1 to indicate endDateA should come before endDateB
+  }
+  if (endDateA < endDateB) {
+    return -1; // Return 1 to indicate endDateB should come before endDateA
+  }
+  return 0; // Return 0 if the dates are equal
 };
 
 module.exports = {

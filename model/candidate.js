@@ -50,6 +50,7 @@ const insertCandidateData = async (candidateInformation) => {
     gender,
     veteran_status,
     disability_status,
+    ethnicity,
   } = candidateInformation;
 
   console.log(
@@ -65,7 +66,8 @@ const insertCandidateData = async (candidateInformation) => {
     veteran_status,
     disability_status,
     country,
-    phone_no
+    phone_no,
+    ethnicity
   );
 
   if (
@@ -81,14 +83,15 @@ const insertCandidateData = async (candidateInformation) => {
     !zipcode ||
     !gender ||
     !veteran_status ||
-    !disability_status
+    !disability_status ||
+    !ethnicity
   )
     throw new Error("Some fields are missing");
 
   return await db
     .raw(
       `insert into candidate(first_name, last_name, email_id, street_no, street_name, city, state, zipcode, gender,
-    veteran_status, disability_status, country, phone_no) values(?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    veteran_status, disability_status, country, phone_no,ethnicity) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         first_name,
         last_name,
@@ -103,6 +106,7 @@ const insertCandidateData = async (candidateInformation) => {
         disability_status,
         country,
         phone_no,
+        ethnicity,
       ]
     )
     .then((res) => res[0].insertId);
@@ -197,25 +201,27 @@ const updateCandidateData = (candidateInformation, candidate_Id) => {
     zipcode,
     highestDegreeAttained: highest_degree_attained,
     gender,
+    ethnicity,
     veteran_status,
     disability_status,
   } = candidateInformation;
 
-  console.log(
-    first_name,
-    last_name,
-    email_id,
-    street_no,
-    street_name,
-    city,
-    state,
-    zipcode,
-    gender,
-    veteran_status,
-    disability_status,
-    country,
-    phone_no
-  );
+  // console.log(
+  //   first_name,
+  //   last_name,
+  //   email_id,
+  //   street_no,
+  //   street_name,
+  //   city,
+  //   state,
+  //   zipcode,
+  //   gender,
+  //   veteran_status,
+  //   disability_status,
+  //   country,
+  //   phone_no,
+  //   ethnicity
+  // );
 
   if (
     !first_name ||
@@ -230,12 +236,13 @@ const updateCandidateData = (candidateInformation, candidate_Id) => {
     !zipcode ||
     !gender ||
     !veteran_status ||
-    !disability_status
+    !disability_status ||
+    !ethnicity
   )
     throw new Error("Some fields are missing");
 
   return db.raw(
-    "update candidate set first_name= ?,last_name=?,email_id=?,phone_no=?,street_no=?,street_name=?,city=?,state=?,country=?,zipcode=?,gender=?,veteran_status=?,disability_status=? where candidate_id=?",
+    "update candidate set first_name= ?,last_name=?,email_id=?,phone_no=?,street_no=?,street_name=?,city=?,state=?,country=?,zipcode=?,gender=?,veteran_status=?,disability_status=?, ethnicity =?,highest_degree_attained=? where candidate_id=?",
     [
       first_name,
       last_name,
@@ -250,10 +257,12 @@ const updateCandidateData = (candidateInformation, candidate_Id) => {
       gender,
       veteran_status,
       disability_status,
-
+      ethnicity,
+      highest_degree_attained,
       candidate_Id,
     ]
   );
+  console.log("candidate updated");
 };
 
 const updateEducationData = async (educationInfo, candidate_id) => {
@@ -300,11 +309,12 @@ const updateWorkEx = async (workExInfo, candidate_id) => {
       responsibilities,
       is_currently_working,
       start_date,
-      end_date,
+      end_date: is_currently_working ? null : end_date,
     };
   });
 
   for (const workExpereince of formattedWorkExInfo) {
+    console.log(workExpereince);
     //TODO: Do we need raw query?
     await db("work_experience")
       .update(workExpereince)
