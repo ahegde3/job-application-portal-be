@@ -13,10 +13,10 @@ const {
   updateJobAppStatus,
 } = require("../model/jobs");
 
-const getJobByKeyword = (keyword) => {
-  if (!keyword) throw new Error("Empty keyword");
+const getJobByKeyword = (keyword, candidateId) => {
+  if (!keyword || !candidateId) throw new Error("Empty keyword");
 
-  return findJobsByKeyword(keyword);
+  return findJobsByKeyword(keyword, candidateId);
 };
 
 const getJobOpeningDetails = (jobId) => {

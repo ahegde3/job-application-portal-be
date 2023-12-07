@@ -14,9 +14,10 @@ const {
 
 router.get("/searchJobByKeyword", async (req, res) => {
   const keyword = req.query.keyword;
+  const candidateId = req.query.candidateId;  
 
   try {
-    const response = await getJobByKeyword(keyword);
+    const response = await getJobByKeyword(keyword,candidateId);
     res.send(response); // Sending the response back on success
   } catch (error) {
     res.status(404).json({ error: error.message }); // Sending error message in JSON format

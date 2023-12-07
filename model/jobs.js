@@ -1,10 +1,11 @@
-const findJobsByKeyword = async (keyword) => {
-  if (!keyword) throw new Error("Empty keyword");
+const findJobsByKeyword = async (keyword, candidate_id) => {
+  if (!keyword || !candidate_id) throw new Error("Empty keyword");
 
   return await db
-    .raw("call get_jobs_by_keyword(?)", [keyword])
+    .raw("call get_jobs_by_keyword(?,?)", [keyword, candidate_id])
     .then((res) => checkValidation(res))
-    .catch(() => {
+    .catch((e) => {
+      console.log(e);
       throw new Error("Some error");
     });
 };
