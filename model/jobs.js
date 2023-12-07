@@ -186,12 +186,9 @@ module.exports = {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
-<<<<<<< HEAD
-  reviewListOfAppliedJobsByCandidates
-=======
+  reviewListOfAppliedJobsByCandidates,
   findAppliedJobs,
   insertJobOpening,
   insertIntoApplicationQuestions,
   findJobsByCompanyId,
->>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37
 };

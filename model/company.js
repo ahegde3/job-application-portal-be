@@ -170,7 +170,6 @@ const updateCredMapping = async (companyInformation, company_id) => {
   );
 };
 
-<<<<<<< HEAD
 const deleteJobListing = async (job_opening_id) => {
 
   if (
@@ -188,15 +187,3 @@ const deleteJobListing = async (job_opening_id) => {
 
 
 module.exports = { getCompany, getCompanyDataById, findCompanyByEmail, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping, updateCompanyData, updateCredMapping, deleteJobListing };
-=======
-module.exports = {
-  getCompany,
-  getCompanyDataById,
-  findCompanyByEmail,
-  fetchCompanyInformation,
-  insertCompanyData,
-  insertIntoCredMapping,
-  updateCompanyData,
-  updateCredMapping,
-};
->>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37
