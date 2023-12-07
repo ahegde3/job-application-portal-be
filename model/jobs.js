@@ -15,7 +15,7 @@ const findJobOpeningDetails = async (jobId) => {
 
   return await db
     .raw(
-      `select job_opening_id as jobOpeningId,job_location as jobLocation,job_title as jobTitle,job_desc as jobDesc,requirements ,c.company_name as companyName,c.company_desc as companyDesc
+      `select job_opening_id as jobOpeningId,job_location as jobLocation,job_title as jobTitle,job_desc as jobDesc,requirements, no_of_vacancies as noOfVacancies, c.company_name as companyName,c.company_desc as companyDesc
       from job_openings jo 
       inner join company c 
       on jo.company_id = c.company_id
@@ -182,6 +182,39 @@ const checkValidation = (res) => {
   throw new Error("result not found");
 };
 
+const updateJobOpeningData = async (jobInformation) => {
+  const {
+    jobOpeningId: job_opening_id,
+    jobTitle: job_title,
+    noOfVacancies: no_of_vacancies,
+    jobLocation: job_location,
+    jobDesc: job_desc,
+    requirements,
+  } = jobInformation;
+
+  if (
+    ! job_opening_id ||
+    !job_title ||
+    !no_of_vacancies ||
+    !job_location ||
+    !job_desc ||
+    !requirements
+  )
+    throw new Error("Some fields are missing in job updation");
+
+  return db.raw(
+    "update job_openings set job_title = ?, no_of_vacancies = ?, job_location = ?, job_desc = ?, requirements = ? where job_opening_id = ?",
+    [
+      job_title,
+      no_of_vacancies,
+      job_location,
+      job_desc,
+      requirements,
+      job_opening_id
+    ]
+  );
+};
+
 module.exports = {
   findJobsByKeyword,
   findJobOpeningDetails,
@@ -193,4 +226,5 @@ module.exports = {
   insertJobOpening,
   insertIntoApplicationQuestions,
   findJobsByCompanyId,
+  updateJobOpeningData
 };

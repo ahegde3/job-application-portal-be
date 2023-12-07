@@ -8,7 +8,8 @@ const {
   findAppliedJobs,
   insertJobOpening,
   insertIntoApplicationQuestions,
-  findJobsByCompanyId
+  findJobsByCompanyId,
+  updateJobOpeningData
 } = require("../model/jobs");
 
 const getJobByKeyword = (keyword) => {
@@ -53,6 +54,9 @@ const getAppliedJobs = async (candidateId) => {
 const createNewJobOpening = (companyId, jobData) => {
   console.log(companyId, jobData);
   if (!jobData || !companyId) throw new Error("Missing params");
+
+  if(jobData.jobOpeningId)
+    return updateJobOpeningData(jobData)
 
   return insertJobOpening(companyId, jobData).then((res) =>
     insertIntoApplicationQuestions(res, jobData)
