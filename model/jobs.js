@@ -95,10 +95,12 @@ const insertIntoApplicationQuestionJobIdMapping = async (
 
   for (const answer of formattedAnswers) {
     //await db("application_question_job_id_mapping").insert(answer);
-    await db.raw("insert into application_question_job_id_mapping(job_application_id, app_ques_id, answer) values(?,?,?) ",
-    [answer.job_application_id, answer.app_ques_id, answer.answer]
-    )
-    .then((res) => res[0].insertId);
+    await db
+      .raw(
+        "insert into application_question_job_id_mapping(job_application_id, app_ques_id, answer) values(?,?,?) ",
+        [answer.job_application_id, answer.app_ques_id, answer.answer]
+      )
+      .then((res) => res[0].insertId);
   }
 };
 
@@ -186,12 +188,9 @@ module.exports = {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
-<<<<<<< HEAD
-  reviewListOfAppliedJobsByCandidates
-=======
+  reviewListOfAppliedJobsByCandidates,
   findAppliedJobs,
   insertJobOpening,
   insertIntoApplicationQuestions,
   findJobsByCompanyId,
->>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37
 };

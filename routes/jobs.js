@@ -5,13 +5,10 @@ const {
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
-<<<<<<< HEAD
-  getListOfAppliedJobsByCandidates
-=======
+  getListOfAppliedJobsByCandidates,
   getAppliedJobs,
   createNewJobOpening,
   getJobsByCompanyId,
->>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37
 } = require("../controller/jobs");
 
 router.get("/searchJobByKeyword", async (req, res) => {
