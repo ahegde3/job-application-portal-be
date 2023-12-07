@@ -4,6 +4,7 @@ const {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
+  reviewListOfAppliedJobsByCandidates,
   findAppliedJobs,
   insertJobOpening,
   insertIntoApplicationQuestions,
@@ -37,6 +38,13 @@ const applyForJobs = async (candidateId, jobId, answers) => {
   );
 };
 
+const getListOfAppliedJobsByCandidates = (jobId) => {
+  console.log("reviewListOfAppliedJobsByCandidates", jobId);
+  if (!jobId) throw new Error("");
+
+  return reviewListOfAppliedJobsByCandidates(jobId);
+}
+
 const getAppliedJobs = async (candidateId) => {
   if (!candidateId) throw new Error("Missing params");
 
@@ -62,6 +70,7 @@ module.exports = {
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
+  getListOfAppliedJobsByCandidates,
   getAppliedJobs,
   createNewJobOpening,
   getJobsByCompanyId,

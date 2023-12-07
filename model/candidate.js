@@ -130,7 +130,7 @@ const insertIntoCredMapping = async (credMappingInfo, candidate_id) => {
 const insertIntoEducation = async (educationInfo, candidate_id) => {
   const formattedEducationInfo = educationInfo.map((education) => {
     const {
-      university: university_name,
+      universityName: university_name,
       degree: degree_type,
       gpa,
       major,
@@ -161,7 +161,7 @@ const insertIntoWorkEx = async (workExInfo, candidate_Id) => {
   const formattedWorkExInfo = workExInfo.map((workEx) => {
     const {
       position: position,
-      organization: organization_name,
+      organizationName: organization_name,
       responsibilities,
       isCurrentlyWorking: is_currently_working,
       startDate: start_date,

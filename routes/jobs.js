@@ -5,6 +5,7 @@ const {
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
+  getListOfAppliedJobsByCandidates,
   getAppliedJobs,
   createNewJobOpening,
   getJobsByCompanyId,
@@ -50,6 +51,17 @@ router.post("/applyForJobs", async (req, res) => {
 
   try {
     const response = await applyForJobs(candidateId, jobId, answers);
+    res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.get("/getJobAppliedCandidates", async (req, res) => {
+  const jobId = req.query.jobId;
+
+  try {
+    const response = await getListOfAppliedJobsByCandidates(jobId);
     res.send(response); // Sending the response back on success
   } catch (error) {
     res.status(404).json({ error: error.message }); // Sending error message in JSON format
