@@ -7,6 +7,7 @@ const {
   insertIntoCredMapping,
   updateCompanyData,
   updateCredMapping,
+  deleteJobListing
 } = require("../model/company");
 // const { findUserByEmail } = require("../model/candidate");
 
@@ -57,9 +58,11 @@ const registerCompany = async (companyInformation) => {
     insertIntoCredMapping(companyInformation, res)
   );
 };
-module.exports = {
-  getAllCompany,
-  loginCompany,
-  registerCompany,
-  getCompanyInformation,
+
+const deleteListing = async (job_opening_id) => {
+  if (!job_opening_id) throw new Error("Invalid job opening id");
+
+  return await deleteJobListing(job_opening_id);
 };
+module.exports = { getAllCompany, loginCompany, registerCompany, getCompanyInformation, deleteListing};
+
