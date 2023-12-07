@@ -1,4 +1,14 @@
-const { getCompany, findCompanyByEmail, getCompanyDataById, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping, updateCompanyData, updateCredMapping, deleteJobListing } = require("../model/company");
+const {
+  getCompany,
+  findCompanyByEmail,
+  getCompanyDataById,
+  fetchCompanyInformation,
+  insertCompanyData,
+  insertIntoCredMapping,
+  updateCompanyData,
+  updateCredMapping,
+  deleteJobListing
+} = require("../model/company");
 // const { findUserByEmail } = require("../model/candidate");
 
 const getAllCompany = async () => {
@@ -38,14 +48,15 @@ const registerCompany = async (companyInformation) => {
 
   console.log(userData);
   if (userData) {
-    console.log("update data calling")
-    return updateCompanyData(companyInformation, userData.company_id)
-    .then(updateCredMapping(companyInformation, userData.company_id));
+    console.log("update data calling");
+    return updateCompanyData(companyInformation, userData.company_id).then(
+      updateCredMapping(companyInformation, userData.company_id)
+    );
   }
-  console.log("insert again calling")
-  return insertCompanyData(companyInformation)
-    .then((res) => insertIntoCredMapping(companyInformation, res));
-
+  console.log("insert again calling");
+  return insertCompanyData(companyInformation).then((res) =>
+    insertIntoCredMapping(companyInformation, res)
+  );
 };
 
 const deleteListing = async (job_opening_id) => {

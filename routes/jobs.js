@@ -5,7 +5,13 @@ const {
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
+<<<<<<< HEAD
   getListOfAppliedJobsByCandidates
+=======
+  getAppliedJobs,
+  createNewJobOpening,
+  getJobsByCompanyId,
+>>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37
 } = require("../controller/jobs");
 
 router.get("/searchJobByKeyword", async (req, res) => {
@@ -60,6 +66,40 @@ router.get("/getJobAppliedCandidates", async (req, res) => {
   try {
     const response = await getListOfAppliedJobsByCandidates(jobId);
     res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.post("/createNewJobOpening", async (req, res) => {
+  const companyId = req.body.companyId;
+  const jobData = req.body.jobData;
+
+  try {
+    const response = await createNewJobOpening(companyId, jobData);
+    res.send(response); // Sending the response back on success
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.get("/getAppliedJobsForCandidate", async (req, res) => {
+  const candidateId = req.query.candidateId;
+
+  try {
+    const response = await getAppliedJobs(candidateId);
+    res.send(response);
+  } catch (error) {
+    res.status(404).json({ error: error.message }); // Sending error message in JSON format
+  }
+});
+
+router.get("/getJobsForCompanyId", async (req, res) => {
+  const companyId = req.query.companyId;
+
+  try {
+    const response = await getJobsByCompanyId(companyId);
+    res.send(response);
   } catch (error) {
     res.status(404).json({ error: error.message }); // Sending error message in JSON format
   }

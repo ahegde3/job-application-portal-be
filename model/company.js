@@ -16,7 +16,10 @@ const getCompanyDataById = async (id) => {
   console.log("id", id);
 
   return await db
-    .raw("Select company_id as user_id,company_name from company where company_id=?", [id])
+    .raw(
+      "Select company_id as user_id,company_name from company where company_id=?",
+      [id]
+    )
     .then((res) => checkValidation(res))
     .catch(() => {
       throw new Error("Some error");
@@ -25,7 +28,10 @@ const getCompanyDataById = async (id) => {
 
 const fetchCompanyInformation = async (companyId) => {
   return await db
-    .raw("select company_name as companyName, company_email_id as companyEmailId, company_phone as companyPhoneNo, street_no as streetNo, street_name as streetName, city,state,country,zipcode, industry, company_desc as companyDesc from company where company_id = ?", [companyId])
+    .raw(
+      "select company_name as companyName, company_email_id as companyEmailId, company_phone as companyPhoneNo, street_no as streetNo, street_name as streetName, city,state,country,zipcode, industry, company_desc as companyDesc from company where company_id = ?",
+      [companyId]
+    )
     .then((res) => checkValidation(res));
 };
 
@@ -59,24 +65,26 @@ const insertCompanyData = async (companyInformation) => {
   )
     throw new Error("Some fields are missing");
 
-  return await db.raw(
-    `INSERT INTO company
+  return await db
+    .raw(
+      `INSERT INTO company
       (company_name, company_email_id, company_phone, street_no, street_name, city, state,country, zipcode, industry, company_desc)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
-      company_name,
-      company_email_id,
-      company_phone,
-      street_no,
-      street_name,
-      city,
-      state,
-      country,
-      zipcode,
-      industry,
-      company_desc
-    ]
-  );
+      [
+        company_name,
+        company_email_id,
+        company_phone,
+        street_no,
+        street_name,
+        city,
+        state,
+        country,
+        zipcode,
+        industry,
+        company_desc,
+      ]
+    )
+    .then((res) => res[0].insertId);
 };
 
 const checkValidation = (res) => {
@@ -85,23 +93,21 @@ const checkValidation = (res) => {
 };
 
 const insertIntoCredMapping = async (credMappingInfo, company_id) => {
-  console.log("insertIntoCredMapping")
-  console.log(credMappingInfo)
   const { companyEmailId: email_id, password } = credMappingInfo;
-  console.log("cred mapping should have" + email_id, password);
-  console.log("cred mapping should have" + company_id);
-  if (!email_id || !password || !company_id)
-    throw new Error("THis Some fields are missing");
 
+  if (!email_id || !password || !company_id)
+    throw new Error("Some fields are missing");
+
+  const user_type = "company";
+  const candidate_id = null;
   const res = await db.raw(
     `insert into cred_mapping(email_id, password, candidate_id, company_id, user_type) values
     (?, ?, ?, ?, ?);`,
-    [email_id, password, null, company_id, "company"]
+    [email_id, password, candidate_id, company_id, user_type]
   );
+  console.log(res);
 
   console.log("cred mapping should have" + email_id, password);
-
-
 };
 
 const updateCompanyData = async (companyInformation, company_id) => {
@@ -135,7 +141,7 @@ const updateCompanyData = async (companyInformation, company_id) => {
     throw new Error("Some fields are missing");
 
   return db.raw(
-      "update company set company_name = ?, company_email_id = ?, company_phone = ?, street_no = ?, street_name = ?, city = ?,state = ?,country = ?,zipcode = ?, industry = ?, company_desc = ? where company_id = ?",
+    "update company set company_name = ?, company_email_id = ?, company_phone = ?, street_no = ?, street_name = ?, city = ?,state = ?,country = ?,zipcode = ?, industry = ?, company_desc = ? where company_id = ?",
     [
       company_name,
       company_email_id,
@@ -148,32 +154,23 @@ const updateCompanyData = async (companyInformation, company_id) => {
       zipcode,
       industry,
       company_desc,
-      company_id
+      company_id,
     ]
   );
 };
 
 const updateCredMapping = async (companyInformation, company_id) => {
-  const {
-    companyEmailId: email_id, password
-  } = companyInformation;
+  const { companyEmailId: email_id, password } = companyInformation;
 
-  if (
-    !email_id ||
-    !password
-  )
-    throw new Error("Some fields are missing");
+  if (!email_id || !password) throw new Error("Some fields are missing");
 
   return db.raw(
-      "update cred_mapping set email_id = ?, password = ? where company_id = ?",
-    [
-      email_id,
-      password,
-      company_id
-    ]
+    "update cred_mapping set email_id = ?, password = ? where company_id = ?",
+    [email_id, password, company_id]
   );
 };
 
+<<<<<<< HEAD
 const deleteJobListing = async (job_opening_id) => {
 
   if (
@@ -191,3 +188,15 @@ const deleteJobListing = async (job_opening_id) => {
 
 
 module.exports = { getCompany, getCompanyDataById, findCompanyByEmail, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping, updateCompanyData, updateCredMapping, deleteJobListing };
+=======
+module.exports = {
+  getCompany,
+  getCompanyDataById,
+  findCompanyByEmail,
+  fetchCompanyInformation,
+  insertCompanyData,
+  insertIntoCredMapping,
+  updateCompanyData,
+  updateCredMapping,
+};
+>>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37

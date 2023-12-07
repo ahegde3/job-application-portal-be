@@ -68,7 +68,7 @@ const findJobApplicationQuestion = async (jobId) => {
 };
 
 const insertJobApplication = async (candidate_id, job_opening_id) => {
-  console.log(candidate_id, job_opening_id);
+  console.log("insertJobApplication", candidate_id, job_opening_id);
   const STATUS = "APPLIED";
   const applicationId = await db
     .raw(
@@ -102,6 +102,79 @@ const insertIntoApplicationQuestionJobIdMapping = async (
   }
 };
 
+const findAppliedJobs = async (candidateId) => {
+  return await db
+    .raw(
+      `select distinct jo.job_opening_id,jo.job_title as title, ja.app_status as status,c.company_name as companyName
+   from job_application  ja
+   inner join job_openings jo
+   on ja.job_opening_id = jo.job_opening_id
+   inner join company c
+   on jo.company_id =c.company_id
+   where candidate_id=?`,
+      [candidateId]
+    )
+    .then((res) => res?.[0]);
+};
+
+const insertJobOpening = (
+  company_id,
+  {
+    jobTitle: job_title,
+    noOfVacancies: no_of_vacancies,
+    jobLocation: job_location,
+    jobDescription: job_desc,
+    requirements,
+  }
+) => {
+  if (
+    !job_title ||
+    !no_of_vacancies ||
+    !job_desc ||
+    !job_location ||
+    !requirements
+  )
+    throw new Error("Some fields are missing");
+
+  return db
+    .raw(
+      "insert into job_openings(job_title,no_of_vacancies,job_location,job_desc,requirements,company_id)  values(?,?,?,?,?,?)",
+      [
+        job_title,
+        no_of_vacancies,
+        job_location,
+        job_desc,
+        requirements,
+        company_id,
+      ]
+    )
+    .then((res) => res[0].insertId);
+};
+
+const insertIntoApplicationQuestions = async (
+  job_opening_id,
+  { questions }
+) => {
+  questions = questions.map((ques) => ques.appQuestionDesc);
+  for (const app_question_desc of questions) {
+    await db.raw(
+      "insert into application_questions(app_question_desc,job_opening_id) values(?,?)",
+      [app_question_desc, job_opening_id]
+    );
+  }
+};
+
+const findJobsByCompanyId = async (company_id) => {
+  if (!company_id) throw new Error("Some params missing");
+
+  return db
+    .raw(
+      "Select job_opening_id as jobId,job_title as title  from job_openings where company_id=? order by job_opening_id desc",
+      [company_id]
+    )
+    .then((res) => res[0]);
+};
+
 const checkValidation = (res) => {
   if (res?.[0]?.[0]) return res[0][0];
   throw new Error("result not found");
@@ -113,5 +186,12 @@ module.exports = {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
+<<<<<<< HEAD
   reviewListOfAppliedJobsByCandidates
+=======
+  findAppliedJobs,
+  insertJobOpening,
+  insertIntoApplicationQuestions,
+  findJobsByCompanyId,
+>>>>>>> 22b31026d212d7f83702b4b3ecbf49ab12bdfd37
 };

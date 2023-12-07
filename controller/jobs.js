@@ -4,7 +4,11 @@ const {
   findJobApplicationQuestion,
   insertJobApplication,
   insertIntoApplicationQuestionJobIdMapping,
-  reviewListOfAppliedJobsByCandidates
+  reviewListOfAppliedJobsByCandidates,
+  findAppliedJobs,
+  insertJobOpening,
+  insertIntoApplicationQuestions,
+  findJobsByCompanyId
 } = require("../model/jobs");
 
 const getJobByKeyword = (keyword) => {
@@ -39,6 +43,26 @@ const getListOfAppliedJobsByCandidates = (jobId) => {
   if (!jobId) throw new Error("");
 
   return reviewListOfAppliedJobsByCandidates(jobId);
+}
+
+const getAppliedJobs = async (candidateId) => {
+  if (!candidateId) throw new Error("Missing params");
+
+  return findAppliedJobs(candidateId);
+};
+const createNewJobOpening = (companyId, jobData) => {
+  console.log(companyId, jobData);
+  if (!jobData || !companyId) throw new Error("Missing params");
+
+  return insertJobOpening(companyId, jobData).then((res) =>
+    insertIntoApplicationQuestions(res, jobData)
+  );
+};
+
+const getJobsByCompanyId = (companyId) => {
+  if (!companyId) throw new Error("Missing params");
+
+  return findJobsByCompanyId(companyId);
 };
 
 module.exports = {
@@ -46,5 +70,8 @@ module.exports = {
   getJobOpeningDetails,
   getJobApplicationQuestions,
   applyForJobs,
-  getListOfAppliedJobsByCandidates
+  getListOfAppliedJobsByCandidates,
+  getAppliedJobs,
+  createNewJobOpening,
+  getJobsByCompanyId,
 };
