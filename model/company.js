@@ -171,19 +171,21 @@ const updateCredMapping = async (companyInformation, company_id) => {
 };
 
 const deleteJobListing = async (job_opening_id) => {
+  if (!job_opening_id) throw new Error("Job opening id is missing");
 
-  if (
-    !job_opening_id
-  )
-    throw new Error("Job opening id is missing");
-
-  return db.raw(
-      "DELETE FROM job_openings WHERE job_opening_id = ?",
-    [
-      job_opening_id
-    ]
-  );
+  return db.raw("DELETE FROM job_openings WHERE job_opening_id = ?", [
+    job_opening_id,
+  ]);
 };
 
-
-module.exports = { getCompany, getCompanyDataById, findCompanyByEmail, fetchCompanyInformation, insertCompanyData, insertIntoCredMapping, updateCompanyData, updateCredMapping, deleteJobListing };
+module.exports = {
+  getCompany,
+  getCompanyDataById,
+  findCompanyByEmail,
+  fetchCompanyInformation,
+  insertCompanyData,
+  insertIntoCredMapping,
+  updateCompanyData,
+  updateCredMapping,
+  deleteJobListing,
+};
