@@ -9,7 +9,8 @@ const {
   insertJobOpening,
   insertIntoApplicationQuestions,
   findJobsByCompanyId,
-  updateJobOpeningData
+  updateJobOpeningData,
+  updateJobAppStatus,
 } = require("../model/jobs");
 
 const getJobByKeyword = (keyword) => {
@@ -44,7 +45,7 @@ const getListOfAppliedJobsByCandidates = (jobId) => {
   if (!jobId) throw new Error("");
 
   return reviewListOfAppliedJobsByCandidates(jobId);
-}
+};
 
 const getAppliedJobs = async (candidateId) => {
   if (!candidateId) throw new Error("Missing params");
@@ -55,8 +56,7 @@ const createNewJobOpening = (companyId, jobData) => {
   console.log(companyId, jobData);
   if (!jobData || !companyId) throw new Error("Missing params");
 
-  if(jobData.jobOpeningId)
-    return updateJobOpeningData(jobData)
+  if (jobData.jobOpeningId) return updateJobOpeningData(jobData);
 
   return insertJobOpening(companyId, jobData).then((res) =>
     insertIntoApplicationQuestions(res, jobData)
@@ -69,6 +69,12 @@ const getJobsByCompanyId = (companyId) => {
   return findJobsByCompanyId(companyId);
 };
 
+const updateJobApplicationStatus = (jobId, candidateId, status) => {
+  if (!jobId || !candidateId || !status) throw new Error("Missing params");
+
+  return updateJobAppStatus(jobId, candidateId, status);
+};
+
 module.exports = {
   getJobByKeyword,
   getJobOpeningDetails,
@@ -78,4 +84,5 @@ module.exports = {
   getAppliedJobs,
   createNewJobOpening,
   getJobsByCompanyId,
+  updateJobApplicationStatus,
 };

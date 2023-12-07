@@ -35,14 +35,14 @@ const reviewListOfAppliedJobsByCandidates = async (jobId) => {
 
   return await db
     .raw(
-      `select c.first_name, c.last_name, c.email_id, c.phone_no, j.app_status from candidate c 
+      `select c.candidate_id as candidateId,c.first_name as firstName, c.last_name as lastName, c.email_id as emailId, c.phone_no as phoneNo, j.app_status as status from candidate c 
       inner join job_application j on
       c.candidate_id = j.candidate_id
-      where j.job_application_id = ?
+      where j.job_opening_id = ?
       order by j.application_updated_at`,
       [jobId]
     )
-    .then((res) => checkValidation(res))
+    .then((res) => res[0])
     .catch((e) => {
       console.log(e);
       throw new Error("Some error");
@@ -125,7 +125,7 @@ const insertJobOpening = (
     jobTitle: job_title,
     noOfVacancies: no_of_vacancies,
     jobLocation: job_location,
-    jobDescription: job_desc,
+    jobDesc: job_desc,
     requirements,
   }
 ) => {
@@ -193,7 +193,7 @@ const updateJobOpeningData = async (jobInformation) => {
   } = jobInformation;
 
   if (
-    ! job_opening_id ||
+    !job_opening_id ||
     !job_title ||
     !no_of_vacancies ||
     !job_location ||
@@ -210,8 +210,15 @@ const updateJobOpeningData = async (jobInformation) => {
       job_location,
       job_desc,
       requirements,
-      job_opening_id
+      job_opening_id,
     ]
+  );
+};
+
+const updateJobAppStatus = (job_opening_id, candidate_id, status) => {
+  return db.raw(
+    "update job_application set app_status =? where job_opening_id=? and candidate_id=?",
+    [status, job_opening_id, candidate_id]
   );
 };
 
@@ -226,5 +233,6 @@ module.exports = {
   insertJobOpening,
   insertIntoApplicationQuestions,
   findJobsByCompanyId,
-  updateJobOpeningData
+  updateJobOpeningData,
+  updateJobAppStatus,
 };
