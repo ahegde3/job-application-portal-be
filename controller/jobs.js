@@ -7,6 +7,7 @@ const {
   findAppliedJobs,
   insertJobOpening,
   insertIntoApplicationQuestions,
+  findJobsByCompanyId
 } = require("../model/jobs");
 
 const getJobByKeyword = (keyword) => {
@@ -50,6 +51,12 @@ const createNewJobOpening = (companyId, jobData) => {
   );
 };
 
+const getJobsByCompanyId = (companyId) => {
+  if (!companyId) throw new Error("Missing params");
+
+  return findJobsByCompanyId(companyId);
+};
+
 module.exports = {
   getJobByKeyword,
   getJobOpeningDetails,
@@ -57,4 +64,5 @@ module.exports = {
   applyForJobs,
   getAppliedJobs,
   createNewJobOpening,
+  getJobsByCompanyId,
 };

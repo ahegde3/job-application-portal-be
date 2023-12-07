@@ -131,6 +131,7 @@ const insertIntoApplicationQuestions = async (
   job_opening_id,
   { questions }
 ) => {
+  questions = questions.map((ques) => ques.appQuestionDesc);
   for (const app_question_desc of questions) {
     await db.raw(
       "insert into application_questions(app_question_desc,job_opening_id) values(?,?)",
@@ -138,6 +139,18 @@ const insertIntoApplicationQuestions = async (
     );
   }
 };
+
+const findJobsByCompanyId = async (company_id) => {
+  if (!company_id) throw new Error("Some params missing");
+
+  return db
+    .raw(
+      "Select job_opening_id as jobId,job_title as title  from job_openings where company_id=? order by job_opening_id desc",
+      [company_id]
+    )
+    .then((res) => res[0]);
+};
+
 const checkValidation = (res) => {
   if (res?.[0]?.[0]) return res[0][0];
   throw new Error("result not found");
@@ -152,4 +165,5 @@ module.exports = {
   findAppliedJobs,
   insertJobOpening,
   insertIntoApplicationQuestions,
+  findJobsByCompanyId,
 };
