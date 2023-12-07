@@ -51,7 +51,7 @@ router.get("/getCompanyInformation", async (req, res) => {
   }
 });
 
-router.get("/deleteOpeningByCompany", async (req, res) => {
+router.get("/deleteOpeningByJobId", async (req, res) => {
   const jobId = req.query.jobId;
 
   try {
