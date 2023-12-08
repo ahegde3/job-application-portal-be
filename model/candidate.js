@@ -67,7 +67,8 @@ const insertCandidateData = async (candidateInformation) => {
     disability_status,
     country,
     phone_no,
-    ethnicity
+    ethnicity,
+    highest_degree_attained
   );
 
   if (
@@ -91,7 +92,7 @@ const insertCandidateData = async (candidateInformation) => {
   return await db
     .raw(
       `insert into candidate(first_name, last_name, email_id, street_no, street_name, city, state, zipcode, gender,
-    veteran_status, disability_status, country, phone_no,ethnicity) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    veteran_status, disability_status, country, phone_no,ethnicity,highest_degree_attained) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         first_name,
         last_name,
@@ -107,6 +108,7 @@ const insertCandidateData = async (candidateInformation) => {
         country,
         phone_no,
         ethnicity,
+        highest_degree_attained,
       ]
     )
     .then((res) => res[0].insertId);
