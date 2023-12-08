@@ -29,7 +29,8 @@ const getCompanyDataById = async (id) => {
 const fetchCompanyInformation = async (companyId) => {
   return await db
     .raw(
-      "select company_name as companyName, company_email_id as companyEmailId, company_phone as companyPhoneNo, street_no as streetNo, street_name as streetName, city,state,country,zipcode, industry, company_desc as companyDesc from company where company_id = ?",
+      `select company_name as companyName, cm.password,company_email_id as companyEmailId, company_phone as companyPhoneNo, street_no as streetNo, street_name as streetName, city,state,country,zipcode, industry, company_desc as companyDesc from company  c 
+      inner join cred_mapping cm on c.company_id = cm.company_id where c.company_id = ?`,
       [companyId]
     )
     .then((res) => checkValidation(res));
