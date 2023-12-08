@@ -5,13 +5,13 @@ const findJobsByKeyword = async (keyword, candidate_id) => {
     .raw("call get_jobs_by_keyword(?,?)", [keyword, candidate_id])
     .then((res) => checkValidation(res))
     .catch((e) => {
-      console.log(e);
+  
       throw new Error("Some error");
     });
 };
 
 const findJobOpeningDetails = async (jobId) => {
-  console.log("findJobOpeningDetails");
+
   if (!jobId) throw new Error("Empty jobId");
 
   return await db
@@ -25,13 +25,12 @@ const findJobOpeningDetails = async (jobId) => {
     )
     .then((res) => checkValidation(res))
     .catch((e) => {
-      console.log(e);
+
       throw new Error("Some error");
     });
 };
 
 const reviewListOfAppliedJobsByCandidates = async (jobId) => {
-  console.log("reviewListOfAppliedJobsByCandidates");
   if (!jobId) throw new Error("Empty jobId in query");
 
   return await db
@@ -45,13 +44,13 @@ const reviewListOfAppliedJobsByCandidates = async (jobId) => {
     )
     .then((res) => res[0])
     .catch((e) => {
-      console.log(e);
+
       throw new Error("Some error");
     });
 };
 
 const findJobApplicationQuestion = async (jobId) => {
-  console.log("findJobOpeningDetails", jobId);
+
   if (!jobId) throw new Error("Empty jobId");
 
   return await db
@@ -63,13 +62,11 @@ const findJobApplicationQuestion = async (jobId) => {
     )
     .then((res) => res[0])
     .catch((e) => {
-      console.log(e);
       throw new Error("Some error");
     });
 };
 
 const insertJobApplication = async (candidate_id, job_opening_id) => {
-  console.log("insertJobApplication", candidate_id, job_opening_id);
   const STATUS = "APPLIED";
   const applicationId = await db
     .raw(

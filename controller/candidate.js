@@ -13,7 +13,6 @@ const {
 } = require("../model/candidate");
 
 const getAllCandidate = async () => {
-  console.log("inside");
   return await getCandidate();
 };
 
@@ -22,7 +21,6 @@ const loginCandidate = async (emailId, password) => {
 
   const USER_TYPE = "candidate";
   const userData = await findUserByEmail(emailId, USER_TYPE);
-  // console.log(userData);
   if (!userData) throw new Error("User not found");
 
   if (userData.password !== password) throw new Error("password not matching");
@@ -45,14 +43,13 @@ const registerCandidate = async (
     .map((education) => education.degree);
 
   candidateInformation.highestDegreeAttained = education[education.length - 1];
-  console.log(candidateInformation);
   //check if candidate is already present
   const USER_TYPE = "candidate";
   const userData = await findUserByEmail(
     candidateInformation.emailId,
     USER_TYPE
   );
-  console.log("userData", userData);
+
   if (userData) {
     return updateCandidateData(candidateInformation, userData.candidate_id)
       .then(updateWorkEx(workExperienceInformation, userData.candidate_id))

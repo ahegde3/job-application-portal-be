@@ -12,7 +12,7 @@ const {
 // const { findUserByEmail } = require("../model/candidate");
 
 const getAllCompany = async () => {
-  console.log("inside");
+ 
   return await getCompany();
 };
 
@@ -21,7 +21,7 @@ const loginCompany = async (emailId, password) => {
 
   const USER_TYPE = "company";
   const userData = await findCompanyByEmail(emailId, USER_TYPE);
-  console.log(userData);
+
   if (!userData) throw new Error("User not found");
 
   if (userData.password !== password) throw new Error("password not matching");
@@ -35,7 +35,6 @@ const getCompanyInformation = async (companyId) => {
 };
 
 const registerCompany = async (companyInformation) => {
-  console.log(companyInformation);
   if (!companyInformation) throw new Error("Data not available");
   //TODO: Do we need any check ?
 
@@ -46,14 +45,14 @@ const registerCompany = async (companyInformation) => {
     USER_TYPE
   );
 
-  console.log(userData);
+
   if (userData) {
-    console.log("update data calling");
+
     return updateCompanyData(companyInformation, userData.company_id).then(
       updateCredMapping(companyInformation, userData.company_id)
     );
   }
-  console.log("insert again calling");
+
   return insertCompanyData(companyInformation).then((res) =>
     insertIntoCredMapping(companyInformation, res)
   );

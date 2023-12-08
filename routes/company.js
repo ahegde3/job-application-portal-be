@@ -42,7 +42,7 @@ router.post("/registerCompany", async (req, res) => {
 
 router.get("/getCompanyInformation", async (req, res) => {
   const companyId = req.query.userId;
-  console.log(companyId);
+
   try {
     const resposne = await getCompanyInformation(companyId);
     res.send(resposne);

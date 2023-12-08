@@ -3,7 +3,7 @@ const getCandidate = async () => {
 };
 
 const findUserByEmail = async (email, user_type) => {
-  console.log("email", email, user_type);
+ 
   return await db
     .raw("Select * from cred_mapping where email_id=? and user_type=?", [
       email,
@@ -14,7 +14,7 @@ const findUserByEmail = async (email, user_type) => {
 };
 
 const getCandidateById = async (id) => {
-  console.log("id", id);
+
 
   return await db
     .raw(
@@ -23,7 +23,7 @@ const getCandidateById = async (id) => {
     )
     .then((res) => checkValidation(res))
     .catch((e) => {
-      console.log("error");
+
       throw new Error("Some error");
     });
 };
@@ -53,23 +53,6 @@ const insertCandidateData = async (candidateInformation) => {
     ethnicity,
   } = candidateInformation;
 
-  console.log(
-    first_name,
-    last_name,
-    email_id,
-    street_no,
-    street_name,
-    city,
-    state,
-    zipcode,
-    gender,
-    veteran_status,
-    disability_status,
-    country,
-    phone_no,
-    ethnicity,
-    highest_degree_attained
-  );
 
   if (
     !first_name ||
@@ -163,7 +146,7 @@ const insertIntoEducation = async (educationInfo, candidate_id) => {
 };
 
 const insertIntoWorkEx = async (workExInfo, candidate_Id) => {
-  console.log(candidate_Id);
+
   const formattedWorkExInfo = workExInfo.map((workEx) => {
     const {
       position: position,
@@ -208,22 +191,6 @@ const updateCandidateData = (candidateInformation, candidate_Id) => {
     disability_status,
   } = candidateInformation;
 
-  // console.log(
-  //   first_name,
-  //   last_name,
-  //   email_id,
-  //   street_no,
-  //   street_name,
-  //   city,
-  //   state,
-  //   zipcode,
-  //   gender,
-  //   veteran_status,
-  //   disability_status,
-  //   country,
-  //   phone_no,
-  //   ethnicity
-  // );
 
   if (
     !first_name ||
@@ -264,7 +231,7 @@ const updateCandidateData = (candidateInformation, candidate_Id) => {
       candidate_Id,
     ]
   );
-  console.log("candidate updated");
+
 };
 
 const updateEducationData = async (educationInfo, candidate_id) => {
@@ -316,8 +283,7 @@ const updateWorkEx = async (workExInfo, candidate_id) => {
   });
 
   for (const workExpereince of formattedWorkExInfo) {
-    console.log(workExpereince);
-    //TODO: Do we need raw query?
+
     await db("work_experience")
       .update(workExpereince)
       .where({ candidate_Id: candidate_id });

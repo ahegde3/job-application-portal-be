@@ -108,7 +108,7 @@ router.post("/updateJobApplicationStatus", async (req, res) => {
   const jobId = req.body.jobId;
   const candidateId = req.body.candidateId;
   const status = req.body.status;
-  console.log(jobId, candidateId, status);
+
   try {
     const response = await updateJobApplicationStatus(
       jobId,

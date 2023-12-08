@@ -15,7 +15,7 @@ router.get("/getAllCandidate", async (req, res) => {
 router.post("/loginCandidate", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log(email, password);
+
   try {
     const response = await loginCandidate(email, password);
     res.send(response); // Sending the response back on success
@@ -43,7 +43,7 @@ router.post("/registerCandidate", async (req, res) => {
 
 router.get("/getCandidateInformation", async (req, res) => {
   const candidateId = req.query.userId;
-  console.log(candidateId);
+
   try {
     const resposne = await getCandidateInformation(candidateId);
     res.send(resposne);

@@ -13,8 +13,6 @@ const findCompanyByEmail = async (email, user_type) => {
 };
 
 const getCompanyDataById = async (id) => {
-  console.log("id", id);
-
   return await db
     .raw(
       "Select company_id as user_id,company_name from company where company_id=?",
@@ -106,9 +104,8 @@ const insertIntoCredMapping = async (credMappingInfo, company_id) => {
     (?, ?, ?, ?, ?);`,
     [email_id, password, candidate_id, company_id, user_type]
   );
-  console.log(res);
 
-  console.log("cred mapping should have" + email_id, password);
+
 };
 
 const updateCompanyData = async (companyInformation, company_id) => {
